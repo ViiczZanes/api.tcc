@@ -12,6 +12,14 @@ import multer from 'multer'
 import multerConfig from './config/multer'
 import { DeleteProductController } from "./controllers/product/DeleteProductController";
 import { ListProductByCategoryController } from "./controllers/product/ListProductByCategoryController";
+import { CreateOrderController } from "./controllers/order/CreateOrderController";
+import { DeleteOrderController } from "./controllers/order/DeleteOrderController";
+import { DetailOrderController } from "./controllers/order/DetailOrderController";
+import { ListOrderController } from "./controllers/order/ListOrderController";
+import { AddItemController } from "./controllers/item/AddItemController";
+import { RemoveItemController } from "./controllers/item/RemoveItemController";
+import { FinishOrderController } from "./controllers/order/FinishOrderController";
+import { RemoveFromDraftOrderController } from "./controllers/order/RemoveFromDraftOrderController";
 
 
 const router = Router()
@@ -35,4 +43,13 @@ router.post('/product/create', AuthMiddleware, multer(multerConfig).single("file
 router.delete('/product/delete', AuthMiddleware, DeleteProductController.handle)
 router.get('/products', AuthMiddleware, ListProductByCategoryController.handle)
 
+router.post('/order/create', AuthMiddleware, CreateOrderController.handle)
+router.delete('/order/delete', AuthMiddleware, DeleteOrderController.handle)
+router.post('/order/finish', AuthMiddleware, FinishOrderController.handle)
+router.post('/order/draft', AuthMiddleware, RemoveFromDraftOrderController.handle)
+router.get('/order/detail', AuthMiddleware, DetailOrderController.handle)
+router.get('/orders', AuthMiddleware, ListOrderController.handle)
+
+router.post('/item/add', AuthMiddleware, AddItemController.handle)
+router.delete('/item/remove', AuthMiddleware, RemoveItemController.handle)
 export { router }
