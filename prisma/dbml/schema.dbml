@@ -1,0 +1,78 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table users {
+  id String [pk]
+  name String [not null]
+  password String [not null]
+  email String [not null]
+  role Role [not null, default: 'cliente']
+  created_at DateTime [default: `now()`]
+  updated_at DateTime [default: `now()`]
+}
+
+Table categories {
+  id String [pk]
+  name String [not null]
+  created_at DateTime [default: `now()`]
+  updated_at DateTime [default: `now()`]
+  products products [not null]
+}
+
+Table products {
+  id String [pk]
+  name String [not null]
+  price String [not null]
+  description String [not null]
+  image String [not null]
+  created_at DateTime [default: `now()`]
+  updated_at DateTime [default: `now()`]
+  category categories
+  category_id String
+  items items [not null]
+}
+
+Table orders {
+  id String [pk]
+  status Boolean [not null, default: false]
+  draft Boolean [not null, default: true]
+  created_at DateTime [default: `now()`]
+  updated_at DateTime [default: `now()`]
+  items items [not null]
+  Table tables
+  table_id String
+}
+
+Table items {
+  id String [pk]
+  amount Int [not null]
+  created_at DateTime [default: `now()`]
+  updated_at DateTime [default: `now()`]
+  order orders
+  order_id String
+  product products
+  product_id String
+}
+
+Table tables {
+  id String [pk]
+  number Int [not null]
+  orders orders [not null]
+}
+
+Enum Role {
+  admin
+  cozinha
+  garcom
+  cliente
+  caixa
+}
+
+Ref: products.category_id > categories.id
+
+Ref: orders.table_id > tables.id
+
+Ref: items.order_id > orders.id
+
+Ref: items.product_id > products.id

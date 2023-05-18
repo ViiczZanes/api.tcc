@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+// generator docs {
+//   provider = "node node_modules/prisma-docs-generator"
+//   output   = "../docs"
+// }
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String    @id @default(uuid())
+  name       String
+  password   String
+  email      String
+  role       Role      @default(cliente) // Adicione a coluna "role" e defina um valor padrão
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("users")
+}
+
+enum Role {
+  admin
+  cozinha
+  garcom
+  cliente
+  caixa
+}
+
+model Category {
+  id         String    @id @default(uuid())
+  name       String
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+  products   Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  name        String
+  price       String
+  description String
+  image       String
+  created_at  DateTime? @default(now())
+  updated_at  DateTime? @default(now())
+  category    Category? @relation(fields: [category_id], references: [id])
+  category_id String?
+
+  items Item[]
+
+  @@map("products")
+}
+
+model Order {
+  id         String    @id @default(uuid())
+  status     Boolean   @default(false)
+  draft      Boolean   @default(true)
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  items    Item[]
+  Table    Table?  @relation(fields: [table_id], references: [id])
+  table_id String?
+
+  @@map("orders")
+}
+
+model Item {
+  id         String    @id @default(uuid())
+  amount     Int
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  order      Order?   @relation(fields: [order_id], references: [id])
+  order_id   String?
+  product    Product? @relation(fields: [product_id], references: [id])
+  product_id String?
+
+  @@map("items")
+}
+
+model Table {
+  id     String  @id @default(uuid())
+  number Int
+  orders Order[]
+
+  @@map("tables")
+}
