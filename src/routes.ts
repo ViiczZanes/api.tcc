@@ -59,7 +59,7 @@ router.get('/category/products', Permission('admin'), ListAllCategoryAndProducts
 router.post('/product/create', Permission('admin'), AuthMiddleware, multer(multerConfig).single("file"), CreateProductController.handle)
 router.delete('/product/delete', Permission('admin'), AuthMiddleware, DeleteProductController.handle)
 router.get('/products', AuthMiddleware, ListProductByCategoryController.handle)
-router.get('/products/all', AuthMiddleware, ListAllCategoryAndProductsController.handle)
+router.get('/products/all', ListAllCategoryAndProductsController.handle)
 
 // // Rotas de Mesa
 router.post('/table/create', Permission('admin'), AuthMiddleware, CreateTableController.handle); // Rota para criar uma nova mesa
