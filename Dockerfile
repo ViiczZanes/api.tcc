@@ -17,7 +17,6 @@ COPY . .
 # Compila o código TypeScript para JavaScript
 RUN yarn build
 # Executa o comando para implantar as migrações do Prisma
-RUN npx prisma migrate deploy
 
 RUN npx prisma generate
 
