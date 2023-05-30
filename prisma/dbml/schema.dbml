@@ -6,15 +6,16 @@ Table users {
   id String [pk]
   name String [not null]
   password String [not null]
-  email String [not null]
+  email String [unique, not null]
   role Role [not null, default: 'cliente']
   created_at DateTime [default: `now()`]
   updated_at DateTime [default: `now()`]
+  Order orders [not null]
 }
 
 Table categories {
   id String [pk]
-  name String [not null]
+  name String [unique, not null]
   created_at DateTime [default: `now()`]
   updated_at DateTime [default: `now()`]
   products products [not null]
@@ -42,6 +43,8 @@ Table orders {
   items items [not null]
   Table tables
   table_id String
+  user users
+  user_id String
 }
 
 Table items {
@@ -57,7 +60,7 @@ Table items {
 
 Table tables {
   id String [pk]
-  number Int [not null]
+  number Int [unique, not null]
   orders orders [not null]
 }
 
@@ -72,6 +75,8 @@ Enum Role {
 Ref: products.category_id > categories.id
 
 Ref: orders.table_id > tables.id
+
+Ref: orders.user_id > users.id
 
 Ref: items.order_id > orders.id
 

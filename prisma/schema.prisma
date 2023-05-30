@@ -23,10 +23,11 @@ model User {
   id         String    @id @default(uuid())
   name       String
   password   String
-  email      String
+  email      String    @unique
   role       Role      @default(cliente) // Adicione a coluna "role" e defina um valor padrão
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
+  Order      Order[]
 
   @@map("users")
 }
@@ -41,7 +42,7 @@ enum Role {
 
 model Category {
   id         String    @id @default(uuid())
-  name       String
+  name       String    @unique
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
   products   Product[]
@@ -75,6 +76,8 @@ model Order {
   items    Item[]
   Table    Table?  @relation(fields: [table_id], references: [id])
   table_id String?
+  user     User?   @relation(fields: [user_id], references: [id])
+  user_id  String?
 
   @@map("orders")
 }
@@ -95,7 +98,7 @@ model Item {
 
 model Table {
   id     String  @id @default(uuid())
-  number Int
+  number Int     @unique
   orders Order[]
 
   @@map("tables")
