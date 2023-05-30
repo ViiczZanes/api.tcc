@@ -12,18 +12,22 @@ const CreateCategoryService = {
   async execute(name: CategoryRequest) {
     const categoryName = CategorySchema.parse(name)
 
-    try {
-      const createdCategory = await prismaClient.category.create({
-        data: {
-          name: categoryName
-        }
-      })
+    const categoryAlreadyExists = await prismaClient.category.findFirst({
+      where: {
+        name: categoryName
+      }
+    })
 
-      return createdCategory
-    } catch (err) {
-      return err
-    }
+    if (categoryAlreadyExists) throw new Error('Categoria já Cadastrado')
 
+
+    const createdCategory = await prismaClient.category.create({
+      data: {
+        name: categoryName
+      }
+    })
+
+    return createdCategory
   }
 }
 

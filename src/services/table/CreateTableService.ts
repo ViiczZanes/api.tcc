@@ -8,7 +8,14 @@ const CreateTableService = {
   async execute(tableNumber: TableRequest) {
     const number = TableSchema.parse(tableNumber)
 
-    try {
+    const tableAlreadyExists = await prismaClient.table.findFirst({
+      where: {
+        number
+      }
+    })
+
+    if (tableAlreadyExists) throw new Error('Mesa já Cadastrada')
+
       const table = await prismaClient.table.create({
         data: {
           number
@@ -16,10 +23,6 @@ const CreateTableService = {
       })
 
       return table
-
-    } catch (err) {
-      return err
-    }
 
   }
 }

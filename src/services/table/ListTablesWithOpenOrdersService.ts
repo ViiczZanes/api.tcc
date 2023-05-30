@@ -17,19 +17,23 @@ const ListTablesWithOpenOrdersService = {
     try {
       const tables = await prismaClient.table.findMany({
         include: {
-          orders: true
+          orders: {
+            where: {
+              status: true
+            }
+          }
         }
-      })
+      });
 
-      // Filtrar apenas as mesas com "orders"
-      const tablesWithOrders = tables.filter(table => table.orders.length > 0)
+      const tablesWithOpenOrders = tables.filter(table => table.orders.length > 0);
 
-      return tablesWithOrders
+      return tablesWithOpenOrders;
 
     } catch (err) {
-      return err
+      return err;
     }
   },
 };
+
 
 export { ListTablesWithOpenOrdersService };
